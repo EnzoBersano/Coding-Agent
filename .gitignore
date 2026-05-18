@@ -1,0 +1,29 @@
+# Compilados de Java
+*.class
+*.log
+*.ctxt
+target/
+
+# Archivos de configuración de IntelliJ IDEA
+.idea/
+*.iml
+out/
+gen/
+
+# Archivos de configuración de VS Code
+.vscode/
+
+# Archivos de configuración de Eclipse
+.metadata/
+.classpath
+.project
+.settings/
+
+# Secretos y variables de entorno
+.env
+api_keys.txt
+secrets.json
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
