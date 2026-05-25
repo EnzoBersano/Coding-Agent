@@ -6,6 +6,9 @@ import com.agent.application.ToolInvocationService;
 import com.agent.application.ToolRegistry;
 import com.agent.application.approval.ApprovalPolicy;
 import com.agent.application.approval.ConsoleApprovalPolicy;
+import com.agent.application.planning.approval.ConsolePlanApprovalPolicy;
+import com.agent.application.planning.approval.PlanApprovalPolicy;
+import com.agent.application.planning.PlanningService;
 import com.agent.domain.interfaces.Tool;
 import com.agent.infrastructure.llm.OpenAiClient;
 import com.agent.infrastructure.tools.ListFilesTool;
@@ -49,7 +52,20 @@ public class Main {
                         toolInvocationService
                 );
 
-        ConsoleChatApplication application = new ConsoleChatApplication(orchestrator);
+
+        PlanningService planningService = new PlanningService(llmClient);
+
+        PlanApprovalPolicy planApprovalPolicy = new ConsolePlanApprovalPolicy();
+
+        boolean planModeEnabled = true;
+
+        ConsoleChatApplication application =
+                new ConsoleChatApplication(
+                        orchestrator,
+                        planningService,
+                        planApprovalPolicy,
+                        planModeEnabled
+                );
 
         application.start();
     }
