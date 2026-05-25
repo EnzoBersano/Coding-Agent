@@ -3,9 +3,11 @@ package com.agent.infrastructure.llm.dto.shared;
 import com.agent.domain.model.Message;
 import com.agent.domain.model.Role;
 import com.agent.infrastructure.llm.dto.response.OpenAiToolCall;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record OpenAiMessage(
         String role,
         String content,
