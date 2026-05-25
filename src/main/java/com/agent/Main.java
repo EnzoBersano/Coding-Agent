@@ -16,6 +16,7 @@ import com.agent.infrastructure.tools.ReadFileTool;
 import com.agent.infrastructure.tools.RunCommandTool;
 import com.agent.infrastructure.tools.WebSearchTool;
 import com.agent.infrastructure.tools.WriteFileTool;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.List;
 
@@ -23,7 +24,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String apiKey = System.getenv("OPENAI_API_KEY");
+        Dotenv dotenv = Dotenv.load();
+
+        String apiKey = dotenv.get("OPENAI_API_KEY");
 
         OpenAiClient llmClient = new OpenAiClient(apiKey);
 
