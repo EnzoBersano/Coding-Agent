@@ -10,9 +10,9 @@ public interface Tool {
 
     String getDescription();
 
-    String getJsonSchema();
+    Map<String, Object> getJsonSchema();
 
     boolean isSensitive();
 
-    ToolResult execute(Map<String, Object> arguments);
+    ToolResult execute(Map<String, Object> arguments) throws Exception;
 }
