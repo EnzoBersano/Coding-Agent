@@ -21,8 +21,13 @@ public record Message(
         return new Message(Role.ASSISTANT, null, null,  toolCalls);
     }
 
-    public static Message tool(String content, String toolCallId) {
-        return new Message(Role.TOOL, content, toolCallId, List.of());
+    public static Message tool(String toolCallId, String content) {
+        return new Message(
+                Role.TOOL,
+                content,
+                toolCallId,
+                List.of()
+        );
     }
 
     public boolean hasToolCalls() {
