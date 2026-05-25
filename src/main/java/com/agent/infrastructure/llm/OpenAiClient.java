@@ -3,11 +3,10 @@ package com.agent.infrastructure.llm;
 import com.agent.domain.interfaces.LLMClient;
 import com.agent.domain.interfaces.Tool;
 import com.agent.domain.model.Message;
-import com.agent.domain.model.Role;
 import com.agent.domain.model.ToolCall;
 import com.agent.infrastructure.llm.dto.request.ChatCompletionRequest;
 import com.agent.infrastructure.llm.dto.response.ChatCompletionResponse;
-import com.agent.infrastructure.llm.dto.response.OpenAiToolCall;
+import com.agent.infrastructure.llm.dto.shared.OpenAiToolCall;
 import com.agent.infrastructure.llm.dto.shared.OpenAiMessage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -168,11 +167,6 @@ public class OpenAiClient implements LLMClient {
 
     private Message buildAssistantMessage(OpenAiMessage assistantMessage) {
 
-        return new Message(
-                Role.ASSISTANT,
-                assistantMessage.content(),
-                "",
-                null
-        );
+        return Message.assistant(assistantMessage.content());
     }
 }
