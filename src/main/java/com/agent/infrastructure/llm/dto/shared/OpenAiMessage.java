@@ -2,7 +2,6 @@ package com.agent.infrastructure.llm.dto.shared;
 
 import com.agent.domain.model.Message;
 import com.agent.domain.model.Role;
-import com.agent.infrastructure.llm.dto.response.OpenAiToolCall;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
@@ -17,11 +16,37 @@ public record OpenAiMessage(
 
     public static OpenAiMessage from(Message message) {
 
+        if (message.role() == Role.TOOL) {
+
+            return new OpenAiMessage(
+                    "tool",
+                    message.content(),
+                    null,
+                    message.toolCallId()
+            );
+        }
+
+        if (message.hasToolCalls()) {
+
+            List<OpenAiToolCall> toolCalls =
+                    message.toolCalls()
+                            .stream()
+                            .map(OpenAiToolCall::from)
+                            .toList();
+
+            return new OpenAiMessage(
+                    "assistant",
+                    null,
+                    toolCalls,
+                    null
+            );
+        }
+
         return new OpenAiMessage(
                 mapRole(message.role()),
                 message.content(),
                 null,
-                message.toolCallId()
+                null
         );
     }
 
@@ -32,7 +57,7 @@ public record OpenAiMessage(
             case USER -> "user";
             case ASSISTANT -> "assistant";
             case TOOL -> "tool";
-            case SYSTEM -> "";
+            case SYSTEM -> "system";
         };
     }
 
