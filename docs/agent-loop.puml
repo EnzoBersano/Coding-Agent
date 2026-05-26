@@ -1,0 +1,55 @@
+@startuml
+title Agent Orchestration Loop - Core Flow
+
+actor User
+
+participant "ConsoleChatApplication" as CLI
+participant "AgentOrchestrator" as Orchestrator
+participant "OpenAiClient" as LLM
+participant "ToolInvocationService" as ToolService
+participant "ConversationSession" as Session
+participant "ApprovalPolicy" as Approval
+
+User -> CLI: enters prompt
+CLI -> Session: add(Message.user())
+CLI -> Orchestrator: processTurn(session)
+
+activate Orchestrator
+
+loop up to N iterations
+  Orchestrator -> LLM: generateResponse(history, tools)
+  LLM --> Orchestrator: assistant response
+
+  Orchestrator -> Session: add(assistant message)
+
+  alt no toolCalls
+    Orchestrator --> CLI: final response
+    break
+
+  else has toolCalls
+    Orchestrator -> ToolService: invoke(toolCall)
+
+    ToolService -> Approval: check sensitivity
+
+    alt requires approval
+      Approval -> CLI: request approval
+      CLI -> User: "Approve? (y/n)"
+      User --> CLI: decision
+      CLI --> Approval: decision
+    end
+
+    Approval --> ToolService: approved/rejected
+
+    ToolService -> ToolService: execute tool
+    ToolService --> Orchestrator: ToolResult
+
+    Orchestrator -> Session: add(Message.tool(result))
+  end
+end
+
+deactivate Orchestrator
+
+CLI -> CLI: print response
+CLI --> User: display output
+
+@enduml
